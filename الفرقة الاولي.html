@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مجتمع الفرقة الأولى ميكاترونكس يرحب بكم</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #2ecc71, #3498db); /* خلفية تعبيرية عن الميكاترونكس */
+      text-align: center;
+      padding: 20px;
+      margin: 0;
+    }
+    .container {
+      background-color: #ffffff;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      display: inline-block;
+      max-width: 700px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    h1 {
+      font-size: 28px;
+      color: #333;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+    input {
+      padding: 15px;
+      width: 90%;
+      font-size: 18px;
+      margin-bottom: 20px;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      background-color: #f7f7f7;
+      transition: border 0.3s ease;
+    }
+    input:focus {
+      border: 2px solid #3498db;
+      outline: none;
+    }
+    button {
+      padding: 12px 25px;
+      font-size: 18px;
+      background-color: #2ecc71;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #27ae60;
+    }
+    p {
+      font-size: 18px;
+      color: #333;
+    }
+    .error {
+      color: red;
+    }
+    .success {
+      color: green;
+    }
+    .footer {
+      margin-top: 30px;
+      font-size: 18px;
+      color: #333;
+      text-align: center;
+    }
+    .footer p {
+      font-size: 20px;
+      font-weight: bold;
+      color: #333; /* اللون الأسود */
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    .footer span {
+      font-family: 'Arial', sans-serif;
+      font-size: 22px;
+      font-weight: bold;
+      color: #333; /* اللون الأسود */
+      display: inline-block;
+      margin-top: 10px;
+      margin-right: 10px;
+    }
+    .footer span::after {
+      content: "|";
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>مجتمع الفرقة الأولى ميكاترونكس يرحب بكم</h1>
+    <p>الرجاء إدخال رقم الجلوس وكود الكارنيه للتحقق (مطلوب)</p>
+
+    <input type="text" id="numberInput" placeholder="أدخل رقم الجلوس هنا" />
+    <br />
+    <input type="text" id="idCodeInput" placeholder="أدخل كود الكارنيه هنا" />
+    <br />
+    <button onclick="checkNumber()">تحقق</button>
+    <p id="result"></p>
+  </div>
+
+  <div class="footer">
+    <p>تم تصميم هذه الصفحة بواسطة:</p>
+    <span>Eng. Mohame Gharib</span>
+    <span>Eng. Mostafa Shalapy</span>
+  </div>
+
+  <script>
+    // تحديد الأرقام المصرح بها بين 1241001 و1241785
+    const authorizedNumbers = [];
+    for (let i = 1241001; i <= 1241785; i++) {
+      authorizedNumbers.push(i.toString());
+    }
+
+    const groupLink = "https://chat.whatsapp.com/JjnOrSoVeXiJQOQubNYCVW"; // رابط الجروب
+
+    // دالة التحقق من الرقم
+    function checkNumber() {
+      const enteredNumber = document.getElementById("numberInput").value;
+      const enteredIdCode = document.getElementById("idCodeInput").value;
+      const result = document.getElementById("result");
+
+      // التحقق من وجود المدخلات
+      if (!enteredNumber || !enteredIdCode) {
+        result.style.color = "red";
+        result.textContent = "❌ من فضلك أدخل رقم الجلوس وكود الكارنيه.";
+        return;
+      }
+
+      // التحقق إذا كان الرقم قد تم التحقق منه مسبقًا
+      const checkedNumbers = JSON.parse(localStorage.getItem('checkedNumbers')) || [];
+
+      if (checkedNumbers.includes(enteredNumber)) {
+        result.style.color = "red";
+        result.textContent = "❌ هذا الرقم قد تم التحقق منه مسبقًا.";
+        return;
+      }
+
+      // التحقق من الرقم المصرح به
+      if (authorizedNumbers.includes(enteredNumber)) {
+        result.style.color = "green";
+        result.textContent = "✅ الرقم موجود! جاري تحويلك إلى الجروب...";
+
+        // إضافة الرقم إلى قائمة الأرقام التي تم التحقق منها
+        checkedNumbers.push(enteredNumber);
+        localStorage.setItem('checkedNumbers', JSON.stringify(checkedNumbers));
+
+        // إعادة توجيه المستخدم إلى الجروب بعد 2 ثانية
+        setTimeout(() => {
+          window.location.replace(groupLink); // استخدام window.location.replace لإخفاء الرابط من المتصفح
+        }, 2000); // انتظار 2 ثانية قبل إعادة التوجيه
+      } else {
+        result.style.color = "red";
+        result.textContent = "❌ الرقم غير مصرح به.";
+      }
+    }
+  </script>
+
+</body>
+</html>
